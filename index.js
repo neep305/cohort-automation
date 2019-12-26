@@ -30,7 +30,29 @@ module.exports = {
     },
     checkstatus: (param) => {
         return new Promise((resolve, reject) => {
-
+            const resp = request.get(AMPLITUDE_COHORT_STATUS_ENDPOINT + param.reqest_id, {
+                auth: {
+                    user: amp_token,
+                    pass: amp_secret
+                }
+            }, (error, response, body) => {
+                if (error) {
+                    reject({result: 'err', msg: error});
+                } else {
+                    if (body) {
+                        if (body.async_staus == 'JOB COMPLETED') {
+                            resolve({result: 'ok', msg: body});
+                        } else {
+                            // still job in progress
+                            setTimeout(() => {
+                                this.checkstatus(param);
+                            }, 60000);
+                        }
+                    } else {
+                        reject({result: 'err', msg: error});
+                    }
+                }
+            })
         });
     },
     download: (param, callback) => {
@@ -58,8 +80,8 @@ module.exports = {
 
         request(
             { method: 'GET'
-            , uri: 'https://amplitude.com/api/5/cohorts/request/VQipfz/file'
-            , auth: {user:'56d54c6d801092b4e8718b40c87a5441', pass:'0ebde0387b79b1822b674d2667525ce2'}
+            , uri: 'https://amplitude.com/api/5/cohorts/request/' + param.request_id + '/file'
+            , auth: {user: amp_token, pass: amp_secret}
             }
         , function (error, response, body) {
                 // body is the decompressed response body
