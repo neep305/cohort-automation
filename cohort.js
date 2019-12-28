@@ -18,6 +18,8 @@ req_cohort.request({cohort:'lzscbhq'}).then(
                     req_cohort.download(data, (result) => {
                         console.log(result);
                     })
+                } else {
+                    req_cohort.checkstatus(result);
                 }
             }, (err) => {
 
