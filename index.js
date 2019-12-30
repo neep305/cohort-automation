@@ -19,10 +19,12 @@ module.exports = {
                     pass: amp_secret
                 }
             }, (error, response, body) => {
+                console.log('body: ', body);
+                let data = JSON.parse(body);
                 if (error) {
                     reject({result: 'err', msg: error});
                 } else {
-                    resolve({result: 'ok', msg: body});
+                    resolve({result: 'ok', msg: {cohort_id: data.cohort_id, request_id: data.request_id}});
                 }
 
             });

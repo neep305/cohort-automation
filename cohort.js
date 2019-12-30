@@ -9,18 +9,22 @@ req_cohort.request({cohort:'lzscbhq'}).then(
     (data) => {
         console.log(data);
 
-        // get request_id
-        if (data.request_id) {
-            req_cohort.checkstatus(data).then((status) => {
-                if (status.async_status == 'JOB_COMPLETED') {
-                    req_cohort.download(data, (result) => {
-                        console.log(result);
-                    })
-                }
-            }, (err) => {
-
-            });
-        }
+        if (data.result.ok) {
+            // get request_id
+            if (data.msg.request_id) {
+                req_cohort.checkstatus(data).then((status) => {
+                    if (status.async_status == 'JOB_COMPLETED') {
+                        req_cohort.download(data, (result) => {
+                            console.log(result);
+                        })
+                    }
+                }, (err) => {
+                    console.log('check status err: ', err);
+                });
+            }
+        } else {
+            console.log('request fail: ', data.msg);
+        }        
     }, (error) => {
         console.log(error);
     }
