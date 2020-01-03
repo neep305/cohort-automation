@@ -1,2 +1,7 @@
 # AMPLITUDE COHORT 
-> How to get a cohort id and get customer list 
+
+> List all cohorts
+
+```shell
+GET https://amplitude.com/api/3/cohorts
+```
