@@ -19,6 +19,7 @@ module.exports = {
                     pass: amp_secret
                 }
             }, (error, response, body) => {
+                console.log('[STEP1] ============= request =============');
                 console.log('body: ', body);
                 let data = JSON.parse(body);
                 if (error) {
@@ -32,22 +33,25 @@ module.exports = {
     },
     checkstatus: (param) => {
         return new Promise((resolve, reject) => {
-            const resp = request.get(AMPLITUDE_COHORT_STATUS_ENDPOINT + param.reqest_id, {
+            const resp = request.get(AMPLITUDE_COHORT_STATUS_ENDPOINT + param.request_id, {
                 auth: {
                     user: amp_token,
                     pass: amp_secret
                 }
             }, (error, response, body) => {
+                console.log('[STEP2] ============= checkstatus =============');
                 if (error) {
                     reject({result: 'err', msg: error});
                 } else {
                     if (body) {
+                        console.log('body: ', body);
+
                         if (body.async_staus == 'JOB COMPLETED') {
-                            resolve({result: 'ok', msg: body});
+                            resolve({ result: 'ok', msg: JSON.parse(body) });
                         } else {
                             // still job in progress
                             setTimeout(() => {
-                                this.checkstatus(param);
+                                resolve({ result: 'ok', msg: JSON.parse(body) });                                
                             }, 60000);
                         }
                     } else {
@@ -86,6 +90,7 @@ module.exports = {
             , auth: {user: amp_token, pass: amp_secret}
             }
         , function (error, response, body) {
+                console.log('[STEP3] ============= download =============');
                 // body is the decompressed response body
                 console.log('server encoded the data as: ' + (response.headers['content-encoding'] || 'identity'))
                 // console.log(response);
