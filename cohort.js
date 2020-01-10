@@ -19,7 +19,8 @@ req_cohort.request({cohort:'lzscbhq'}).then(
                                 console.log(result);
                             });
                         } else {
-                            console.log('JOB IN PROGRESS: ', status);
+                            // console.log('JOB IN PROGRESS: ', status);
+                            
                         }
                     } 
                 }, (err) => {
