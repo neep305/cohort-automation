@@ -51,7 +51,9 @@ module.exports = {
                         } else {
                             // still job in progress
                             setTimeout(() => {
-                                resolve({ result: 'ok', msg: JSON.parse(body) });                                
+                                // resolve({ result: 'ok', msg: JSON.parse(body) });                                
+                                
+                                this.checkstatus(param).then(resolve({ result: 'ok', msg: JSON.parse(body) }));
                             }, 60000);
                         }
                     } else {
